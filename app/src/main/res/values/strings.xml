@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Music Player</string>
+    <string name="duration">%s:%s</string>
+    <string name="player_tabS">Player</string>
+    <string name="artist_tabS">Artists</string>
+    <string name="albums_tabS">Albums</string>
+    <string name="tracks_tabS">Tracks</string>
+
+    <string name="name">%s</string>
+    <string name="number">%d</string>
+    <string name="albums_count">%d %s</string>
+    <string name="tracks_count">%d %s</string>
+    <string name="length">%d minutes</string>
+
+    <string name="desc">Artist image</string>
+
+    <string name="library_head">Audio library contains</string>
+    <string name="scan_track">Tracks: %d</string>
+    <string name="scan_artist">Artists: %d</string>
+    <string name="scan_album">Albums: %d</string>
+    <string name="scan_deleted_track">Deleted tracks: %d</string>
+    <string name="scan_button">Scan for music</string>
+    <string name="recreate_button">Delete database</string>
+
+    <string name="tracks">TRACKS</string>
+    <string name="artist_details">%d albums - %d tracks</string>
+
+    <string name="albums_tracks">%d tracks</string>
+    <string name="albums_duration">%d min</string>
+
+</resources>
