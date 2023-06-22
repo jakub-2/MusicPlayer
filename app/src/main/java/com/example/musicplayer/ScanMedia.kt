@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.database.getStringOrNull
@@ -42,7 +41,6 @@ class ScanMedia : AppCompatActivity() {
 
         binding.scanButton.setOnClickListener { scanMusic() }
         binding.recreateButton.setOnClickListener { redoDatabase() }
-//        this.context = context
     }
 
     private fun update() {
@@ -61,7 +59,6 @@ class ScanMedia : AppCompatActivity() {
     }
 
     private fun redoDatabase() {
-        Log.i("1", "recreating")
         GlobalScope.launch(Dispatchers.IO) {
             musicDatabase.trackDao().deleteAll()
             musicDatabase.albumDao().deleteAll()
@@ -75,10 +72,8 @@ class ScanMedia : AppCompatActivity() {
     }
 
     private fun scanMusic(){
-        Log.i("1", "scanning")
         Toast.makeText(this, "Scanning music", Toast.LENGTH_SHORT).show()
         val projection = arrayOf(
-            //you only want to retrieve _ID and DISPLAY_NAME columns
             // track
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE,
@@ -88,25 +83,21 @@ class ScanMedia : AppCompatActivity() {
             MediaStore.Audio.Media.DISPLAY_NAME,
             MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.CD_TRACK_NUMBER,
+
             // album
-            // id is already requested
             MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.YEAR,
-            // num of tracks later
-            // art from file
             MediaStore.Audio.Media.ARTIST_ID,
+
             // artist
-            // id is already requested
             MediaStore.Audio.Media.ARTIST
-            // num of albums and tracks later of query
-//            MediaStore.Audio.Media.ARTIST,
             )
+
         val albums: HashSet<AlbumData> = HashSet()
         val artists: HashSet<ArtistData> = HashSet()
         val tracks: HashSet<TrackData> = HashSet()
         this.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, null, null, null, null)?.use { cursor ->
-            //cache column indices
             // track
             val idTrack = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
             val trackColumn = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
@@ -121,13 +112,13 @@ class ScanMedia : AppCompatActivity() {
             // artist
             val artistColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
 
-            //iterating over all of the found images
             while (cursor.moveToNext()) {
                 // track
                 val trackId = cursor.getString(idTrack)
                 val trackName = cursor.getString(trackColumn)
                 val duration = cursor.getString(durationColumn).toInt()
                 val path = cursor.getString(temp)
+
                 // album
                 val albumName = cursor.getString(albumColumn)
                 val year: Int? = cursor.getStringOrNull(yearColumn)?.toInt()

@@ -37,7 +37,6 @@ class Albums(private val musicPlayer: MediaPlayer, private val playerQueue: Play
         musicDatabase = MusicDatabase.getDatabase(requireContext())
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 result ->
-
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.getBooleanExtra("selected", false)) {
                     playerQueue.readSavedQueue()
@@ -75,7 +74,6 @@ class Albums(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                 recyclerView.adapter = adapter
                 adapter.setOnItemClickListener(object : AlbumsRecyclerAdapter.OnItemClickListener {
                     override fun onItemClick(position: Int) {
-
                         val intent = Intent(context, AlbumDetailActivity::class.java)
                         val name = albums[position].album_name
                         val path = albums[position].image_route
@@ -92,7 +90,6 @@ class Albums(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                         bundle.putSerializable("queue", playerQueue)
                         intent.putExtras(bundle)
                         resultLauncher.launch(intent)
-//                        startActivity(intent)
                     }
                 })
                 adapter.notifyDataSetChanged()

@@ -120,7 +120,6 @@ class AlbumDetailActivity : AppCompatActivity() {
                     Log.i("1", "delete")
                     playerQueue.setDelete(tracks[position].id_track)
                     playerQueue.saveQueue()
-//                    playerQueue.setUpdateTracks(true)
                     GlobalScope.launch (Dispatchers.IO) {
                         musicDatabase.trackDao().setDelete(true, tracks[position].id_track)
                         if (musicDatabase.albumDao().getAlbumNumOfTracks(tracks[position].album_name) == 1) {

@@ -58,6 +58,5 @@ class ArtistsRecyclerAdapter(private var context: Context?, private var artists:
                 listener.onItemClick(adapterPosition)
             }
         }
-
     }
 }

@@ -38,7 +38,6 @@ class AlbumsRecyclerAdapter(private var context: Context?,private var albums: Li
     }
 
     override fun getItemCount(): Int {
-//        return timetableArrayList.size
         return albums.size
     }
 
@@ -47,7 +46,6 @@ class AlbumsRecyclerAdapter(private var context: Context?,private var albums: Li
         val minutes =  (milliseconds?.div(1000) ?: 0) / 60
         val seconds = (milliseconds?.div(1000) ?: 0) % 60
         if (seconds < 10) return listOf(minutes.toString(), "0$seconds") else return listOf(minutes.toString(), seconds.toString())
-//        return listOf<Int>(minutes.toInt(), seconds.toInt())
     }
 
     class MyViewHolder(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {

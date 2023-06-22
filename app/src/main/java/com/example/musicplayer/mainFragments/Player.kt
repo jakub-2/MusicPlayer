@@ -9,7 +9,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,6 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                 musicPlayer.start()
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
                 musicPlayer.pause()
-//                musicPlayer.seekTo(0)
             } else {
                 musicPlayer.pause()
             }
@@ -86,20 +84,11 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
 
     private fun setAudioFocus() {
         audioManager = requireContext().getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        // request the audio focus and
-        // store it in the int variable
         audioFocusRequest  = audioManager!!.requestAudioFocus(focusRequest)
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        start()
-//    }
-//
     override fun onResume() {
         super.onResume()
-////        setAudioFocus()
-    Log.i("resu", "resumed player")
         GlobalScope.launch(Dispatchers.IO) {
             if (playerQueue.getUpdatePlayerStart() || playerQueue.getUpdate()) {
                 playerQueue.readSavedQueue()
@@ -112,8 +101,6 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                         update()
                         playerQueue.setUpdate(false)
                     }
-                    Log.i("resu2", "updating screen")
-//                    update()
                 }
             }
         }
@@ -121,9 +108,6 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
 
     override fun onDestroy() {
         super.onDestroy()
-//        playerQueue.setPosition(musicPlayer.currentPosition)
-//        playerQueue.saveQueue(requireContext().filesDir.path)
-//        playerQueue.saveState(requireContext().filesDir.path)
         musicPlayer.release()
         audioManager!!.abandonAudioFocusRequest(focusRequest)
     }
@@ -131,13 +115,9 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
     private fun start() {
         binding.previousButton.setOnClickListener { previousSong() }
         binding.nextButton.setOnClickListener { nextSong() }
-
-// start
-
         update()
         if (playerQueue.getSize() != 0) {
             if (!musicPlayer.isPlaying) {
-                Log.i("1", playerQueue.getTrackData().track_route!!)
                 musicPlayer.setDataSource(playerQueue.getTrackData().track_route)
                 musicPlayer.prepareAsync()
                 musicPlayer.setOnPreparedListener { playerPrepared(true) }
@@ -178,16 +158,8 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
 
     private fun update() {
         layout = binding.imageL
-
         if (playerQueue.getSize() != 0) {
             if (playerQueue.getTrackData().track_route != null) {
-//                val mmr = MediaMetadataRetriever()
-//                mmr.setDataSource(playerQueue.getTrackData().track_route)
-//
-//                val artistG = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-//                val nameG = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-//                val durationG = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-//                val art = mmr.embeddedPicture
                 val artistG = playerQueue.getTrackData().artist_name
                 val nameG = playerQueue.getTrackData().title
                 val durationG = playerQueue.getTrackData().duration
@@ -208,7 +180,6 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                 )
                 binding.seekBar.max = durationG
                 binding.seekBar.progress = playerQueue.getPosition()
-//            binding.Cover.setImageBitmap(BitmapFactory.decodeByteArray(art, 0, art?.size ?: 0))
                 if (playerQueue.getTrackData().image_route == null) {
                     val ta: TypedArray = requireContext().obtainStyledAttributes(
                         R.style.record,
@@ -220,7 +191,6 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                 } else {
                     binding.Cover.setImageURI(Uri.parse(playerQueue.getTrackData().image_route))
                 }
-//        musicPlayer.isLooping = false
                 binding.seekBar.setOnSeekBarChangeListener(object :
                     SeekBar.OnSeekBarChangeListener {
                     override fun onProgressChanged(
@@ -314,12 +284,6 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
         }
     }
 
-
-//    override fun onStop() {
-//        super.onStop()
-//        musicPlayer.release()
-//    }
-
     private val mUpdateTime: Runnable = object : Runnable {
         override fun run() {
             val currentDuration: Int
@@ -330,7 +294,6 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                     binding.seekBar.progress = currentDuration
                     playerQueue.setPosition(currentDuration)
                     playerQueue.saveState()
-//                    Log.i("posi", currentDuration.toString())
                 }
                 binding.nowTime.postDelayed(this, 10)
             } else {
@@ -353,7 +316,6 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
     private fun playPause(playPauseButton: ImageButton, stop: Boolean) {
         if (musicPlayer.isPlaying) {
             if (resources.configuration.isNightModeActive) playPauseButton.setImageResource(R.drawable.play) else playPauseButton.setImageResource(R.drawable.play_light)
-//            playPauseButton.setImageResource(R.drawable.play)
             musicPlayer.pause()
         } else {
             if (stop || playerQueue.getSize() == 0) {
@@ -365,12 +327,10 @@ class Player(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                     R.drawable.pause_light
                 )
                 binding.nowTime.post(mUpdateTime)
-//            playPauseButton.setImageResource(R.drawable.pause)
                 if (audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                     musicPlayer.start()
                 }
             }
         }
-        Log.i("D", playerQueue.getIndex().toString())
     }
 }

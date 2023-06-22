@@ -3,7 +3,6 @@ package com.example.musicplayer.mainFragments
 import android.content.Context
 import android.content.res.TypedArray
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,9 +62,6 @@ class TracksRecyclerAdapter(
             holder.image.setImageDrawable(ta.getDrawable(0))
             ta.recycle()
         }
-//        holder.optionsButton.setOnClickListener { optionsClicked(holder.optionsButton, position) }
-        Log.i("position item", position.toString())
-//        holder.optionsButton.setOnClickListener { optionsMenuClickListener.onOptionsMenuClicked(position, tracks) }
     }
 
     override fun getItemCount(): Int {

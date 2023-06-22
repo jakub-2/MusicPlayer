@@ -131,6 +131,7 @@ class ArtistDetailActivity : AppCompatActivity() {
             }
         }
     }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun optionMenuClicked(position: Int, tracks: MutableList<TrackData>) {
         val popupMenu = PopupMenu(this, trackRecyclerView[position].findViewById(R.id.track_option_button))

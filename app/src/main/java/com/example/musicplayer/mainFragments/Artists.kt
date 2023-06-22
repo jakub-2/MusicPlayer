@@ -62,12 +62,10 @@ class Artists(private val musicPlayer: MediaPlayer, private val playerQueue: Pla
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.artist_recycler)
         update()
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun update() {
-//        val recyclerView: RecyclerView = view.findViewById(R.id.artist_recycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
         GlobalScope.launch(Dispatchers.IO) {
@@ -88,9 +86,7 @@ class Artists(private val musicPlayer: MediaPlayer, private val playerQueue: Pla
                         bundle.putSerializable("queue", playerQueue)
                         intent.putExtras(bundle)
                         resultLauncher.launch(intent)
-//                        startActivity(intent)
                     }
-
                 })
                 adapteris.notifyDataSetChanged()
             }

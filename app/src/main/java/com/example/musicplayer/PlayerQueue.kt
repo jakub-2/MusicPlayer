@@ -175,9 +175,6 @@ class PlayerQueue(private var path: String) : Serializable {
                 continue
             }
         }
-
-//        trackQueue.removeAt(position)
-//        databaseQueue.removeAt(position)
     }
 
     fun deleteAll() {

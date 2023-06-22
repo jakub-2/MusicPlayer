@@ -3,7 +3,6 @@ package com.example.musicplayer.mainFragments
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,36 +33,23 @@ class Tracks(private val musicPlayer: MediaPlayer, private val playerQueue: Play
         super.onCreate(savedInstanceState)
         binding = FragmentTracksBinding.inflate(layoutInflater)
         musicDatabase = MusicDatabase.getDatabase(requireContext())
-        Log.i("track", "onCreate")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        Log.i("track", "onCreateView")
         return inflater.inflate(R.layout.fragment_tracks, container, false)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("track", "onViewCreated")
         recyclerView = view.findViewById(R.id.tracks_recycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(false)
         update()
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        if (playerQueue.getUpdateTracks()) {
-//            Log.i("update", "update tracks")
-//            update()
-//            playerQueue.setUpdateTracks(false)
-//        }
-//    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun update() {
@@ -105,10 +91,8 @@ class Tracks(private val musicPlayer: MediaPlayer, private val playerQueue: Play
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.track_delete -> {
-                    Log.i("1", "delete")
                     playerQueue.setDelete(tracks[position].id_track)
                     playerQueue.saveQueue()
-//                    playerQueue.setUpdateTracks(true)
                     GlobalScope.launch (Dispatchers.IO) {
                         musicDatabase.trackDao().setDelete(true, tracks[position].id_track)
                         if (musicDatabase.albumDao().getAlbumNumOfTracks(tracks[position].album_name) == 1) {
@@ -130,10 +114,8 @@ class Tracks(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                         playerQueue.setUpdateArtists(true)
                         playerQueue.saveUpdate(true)
                         tracks.removeAt(position)
-                        Log.i("update", "Update done")
                         withContext(Dispatchers.Main) {
                             adapter.notifyDataSetChanged()
-                            Log.i("update", "adapter notified")
                         }
                     }
 
@@ -143,7 +125,6 @@ class Tracks(private val musicPlayer: MediaPlayer, private val playerQueue: Play
                     playerQueue.append(tracks[position])
                     playerQueue.saveQueue()
                     playerQueue.setUpdate(true)
-                    Log.i("2", "adding to queue")
                     Toast.makeText(context, "Added to queue", Toast.LENGTH_SHORT).show()
                     return@setOnMenuItemClickListener true
                 }
