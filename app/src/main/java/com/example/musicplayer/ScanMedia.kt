@@ -128,7 +128,11 @@ class ScanMedia : AppCompatActivity() {
                     if ("/" in trackNumCol) {
                         trackNum = trackNumCol.substring(0 until trackNumCol.indexOf("/")).toInt()
                     } else {
-                        trackNum = trackNumCol.toInt()
+                        try {
+                            trackNum = trackNumCol.toInt()
+                        } catch (e: NumberFormatException) {
+                            trackNum = null
+                        }
                     }
                 }
 
@@ -147,7 +151,9 @@ class ScanMedia : AppCompatActivity() {
             kotlin.run {
                 for (x in tracks) {
                     var imagePath: String?
-                    val temp = File(this.filesDir.path + File.separator + x.album_name + ".png")
+                    var name: String = x.album_name
+                    name = name.replace('/', ' ')
+                    val temp = File(this.filesDir.path + File.separator + name + ".png")
                     if (!temp.exists()) {
                         val mmr = MediaMetadataRetriever()
                         mmr.setDataSource(x.track_route)
@@ -156,7 +162,7 @@ class ScanMedia : AppCompatActivity() {
                             imagePath = null
                         } else {
                             val image = BitmapFactory.decodeByteArray(art, 0, art.size)
-                            val file = File(this.filesDir.path + File.separator + x.album_name + ".png")
+                            val file = File(this.filesDir.path + File.separator + name + ".png")
                             val fos = FileOutputStream(file)
                             image.compress(Bitmap.CompressFormat.PNG, 90, fos)
                             fos.close()
